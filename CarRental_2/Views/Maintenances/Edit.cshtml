@@ -1,0 +1,52 @@
+﻿@model CarRental_2.ViewModels.MaintenanceEditCreateViewModel
+
+@{
+    ViewData["Title"] = "Редактировать";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Редактирование данных о техобслуживании</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken() <!-- Токен защиты от подделки -->
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="CarId" class="control-label">Код автомобиля</label>
+                <input asp-for="CarId" class="form-control" />
+                <span asp-validation-for="CarId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaintenanceDate" class="control-label">Дата техобслуживания</label>
+                <input asp-for="MaintenanceDate" class="form-control" />
+                <span asp-validation-for="MaintenanceDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Вид техобслуживания</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cost" class="control-label">Стоимость техобслуживания</label>
+                <input asp-for="Cost" class="form-control" type="number" step="0.01" />
+                <span asp-validation-for="Cost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="~/Maintenances/Index">Вернуться к списку</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

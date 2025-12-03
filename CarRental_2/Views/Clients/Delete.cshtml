@@ -1,0 +1,41 @@
+﻿@model Client
+
+@{
+    ViewData["Title"] = "Удалить";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Удаление клиента</h2>
+
+<h3>Вы уверены, что хотите удалить клиента?</h3>
+<div>
+ 
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FullName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LicenseNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LicenseNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        @Html.AntiForgeryToken() <!-- Токен подделки -->
+        <input type="hidden" asp-for="ClientId" />
+        <input type="submit" value="Удалить" class="btn btn-primary" /> |
+        <a href="~/Clients/Index">Вернуться к списку</a>
+    </form>
+</div>

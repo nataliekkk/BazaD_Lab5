@@ -1,0 +1,131 @@
+﻿@model CarRental_2.ViewModels.CarViewModel
+
+@{
+    ViewData["Title"] = "Автомобили";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal rentalCostPerDay = Model.RentalCostPerDay;
+}
+
+<h2>Список автомобилей</h2>
+
+<p>
+	<a href="~/Cars/Create">Добавить автомобиль</a>
+</p>
+
+@using (Html.BeginForm("Index", "Cars", FormMethod.Get))
+{
+    <fieldset>
+        Величина суточной арендной платы: @Html.TextBox("RentalCostPerDay", rentalCostPerDay)
+        <input type="submit" value="Найти" />
+    </fieldset>
+}
+
+@if (ViewBag.HasFilters as bool? ?? false)
+{
+    <div class="alert alert-info" style="margin: 10px 0; padding: 15px; border: 1px solid #31708f; background-color: #d9edf7; border-radius: 4px;">
+        <strong>📋 Применены фильтры (восстановлены из куки):</strong><br />
+        • Аренда/сутки: <strong>@ViewBag.FilterRentalCostPerDay</strong><br />
+        • Сортировка: <strong>@ViewBag.FilterSortOrder</strong><br />
+        • Найдено записей: <strong>@Model.PageViewModel.TotalItems</strong> из <strong>@ViewBag.TotalAllRecords</strong> (всего)<br />
+        <small>Фильтры автоматически сохраняются в куки на 30 дней и восстанавливаются при повторном посещении страницы.</small><br />
+        <a href="@ViewBag.ResetUrl" class="btn btn-sm btn-warning">🔄 Сбросить фильтры</a>
+    </div>
+}
+else
+{
+    <div class="alert alert-secondary" style="margin: 10px 0; padding: 10px;">
+        <strong>👀 Показаны все записи</strong> (@Model.PageViewModel.TotalItems из @ViewBag.TotalAllRecords).<br />
+        <small>Задайте фильтр по аренде/сутки или сортировке — значения сохранятся в куки.</small>
+    </div>
+}
+
+<p></p>
+<table class="table" border="1">
+    <thead>
+        <tr>
+            <th style="display:none;">Код автомобиля</th>
+            <th>Класс автомобиля</th>
+            <th>Марка автомобиля</th>
+            <th>Модель автомобиля</th>
+            <th>Государственный номер</th>
+            <th>Год изготовления</th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@Model.SortViewModel.RentalCostPerDaySort"
+                   asp-route-RentalCostPerDay="@rentalCostPerDay">
+                  @Html.DisplayNameFor(model => model.Cars.First().RentalCostPerDay)
+                </a>
+            </th>
+			<th>Статус</th>
+            <th>Действие</th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Cars)
+        {
+            <tr>
+                <td style="display:none;">@item.CarId</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClassName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Brand)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Model)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LicensePlate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RentalCostPerDay)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CarId">Редактировать</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CarId">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p></p>
+<div>
+    @if (Model.PageViewModel.HasPreviousPage)
+    {
+        <a href="@Url.Action("Index", "Cars", new { rentalCostPerDay = Model.RentalCostPerDay, sortOrder = Model.SortViewModel.SortOrder, page = Model.PageViewModel.Page - 1 })">Предыдущая</a>
+    }
+
+    @* Определяем диапазон для отображения ссылок *@
+    @{
+        int currentPage = Model.PageViewModel.Page;
+        int totalPages = Model.PageViewModel.TotalPages;
+
+        int startPage = Math.Max(1, currentPage - 2);
+        int endPage = Math.Min(totalPages, currentPage + 2);
+    }
+
+    @* Отображаем страницы с учетом диапазона *@
+    @for (int i = startPage; i <= endPage; i++)
+    {
+        if (i == currentPage)
+        {
+			<span><b>@i</b></span>   // Текущая страница
+        }
+        else
+        {
+            <a href="@Url.Action("Index", "Cars", new { rentalCostPerDay = Model.RentalCostPerDay, sortOrder = Model.SortViewModel.SortOrder, page = i })">@i</a>
+        }
+    }
+
+    @if (Model.PageViewModel.HasNextPage)
+    {
+        <a href="@Url.Action("Index", "Cars", new { rentalCostPerDay = Model.RentalCostPerDay, sortOrder = Model.SortViewModel.SortOrder, page = Model.PageViewModel.Page + 1 })">Следующая</a>
+    }
+</div>
+<p></p>
+<p><a href="~/Cars/Index">Вернуться к списку</a></p>

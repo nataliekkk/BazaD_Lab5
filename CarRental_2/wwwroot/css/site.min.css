@@ -1,0 +1,63 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px
+}
+
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px
+}
+
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4
+}
+
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%
+}
+
+#qrCode {
+    margin: 15px
+}
+
+@media screen and (max-width:767px) {
+    .carousel-caption {
+        display: none
+    }
+}
+
+.container body-content {
+    margin-top: 20px;
+}
+
+
+
+
+
+
+/*html, body {
+    height: 100%;*/ /* Устанавливаем высоту для html и body */
+    /*margin: 0;*/ /* Убираем отступы */
+    /*}
+
+body {
+    display: flex;*/ /* Используем Flexbox */
+    /*flex-direction: column;*/ /* Располагаем элементы по вертикали */
+    /*}
+
+.container {
+    flex: 1;*/ /* Делаем контейнер "умным", чтобы занимал доступное пространство */
+    /*padding: 10px;*/ /* Отступы внутри контейнера */ /*;
+}
+
+nav {
+    background: #f0f0f0;*/ /* Цвет фона для навигации */
+    /*padding: 10px;*/ /* Отступы для навигации */
+    /*}
+
+footer {
+    background-color: #58f9fa;*/ /* Цвет фона footer */
+    /*padding: 10px;*/ /* Отступы внутри footer */
+    /*text-align: center;*/ /* Центрируем текст */
+    /*}*/

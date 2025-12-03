@@ -1,0 +1,44 @@
+﻿@model Client
+
+@{
+    ViewData["Title"] = "Добавление клиента";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Добавление клиента</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken() <!-- Токен защиты от подделки -->
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FullName" class="control-label">Полное имя</label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LicenseNumber" class="control-label">Водительское удостоверение</label>
+                <input asp-for="LicenseNumber" class="form-control" />
+                <span asp-validation-for="LicenseNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label">Телефон</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Добавить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<p>
+    <a href="~/Clients/Index">Вернуться к списку</a>
+</p>
+
+@section Scripts {
+      @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

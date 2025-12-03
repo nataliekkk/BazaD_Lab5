@@ -1,0 +1,58 @@
+﻿@model RentalAgreement
+
+@{
+    ViewData["Title"] = "Удалить";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Удаление данных о договорах аренды</h2>
+
+<h3>Вы уверены, что хотите удалить данные о договорах аренды?</h3>
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClientId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ClientId)
+        </dd>
+		<dt>
+			@Html.DisplayNameFor(model => model.CarId)
+		</dt>
+		<dd>
+			@Html.DisplayFor(model => model.CarId)
+		</dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDateTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartDateTime)
+        </dd>
+		<dt>
+			@Html.DisplayNameFor(model => model.PlannedEndDateTime)
+		</dt>
+		<dd>
+			@Html.DisplayFor(model => model.PlannedEndDateTime)
+		</dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ActualEndDateTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ActualEndDateTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TotalAmount)
+        </dd>
+    </dl>
+    <form asp-action="Delete">
+        @Html.AntiForgeryToken() <!-- Токен подделки -->
+        <input type="hidden" asp-for="RentalAgreementId" />
+        <input type="submit" value="Удалить" class="btn btn-primary" /> |
+        <a href="~/RentalAgreements/Index">Вернуться к списку</a>
+    </form>
+</div>

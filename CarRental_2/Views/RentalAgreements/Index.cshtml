@@ -1,0 +1,134 @@
+﻿@model CarRental_2.ViewModels.RentalAgreementViewModel
+
+@{
+    ViewData["Title"] = "Список договоров аренды";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // Null-safe переменные
+    bool hasFilters = (bool?)ViewBag.HasFilters ?? false;
+    string filterTotalAmount = ViewBag.FilterTotalAmount?.ToString() ?? "Все суммы";
+    int totalAllRecords = ViewBag.TotalAllRecords != null ? (int)ViewBag.TotalAllRecords : 0;
+    string resetUrl = ViewBag.ResetUrl?.ToString() ?? "#";
+    decimal totalAmount = Model?.TotalAmount ?? 0m;
+    int filteredCount = Model?.PageViewModel?.TotalItems ?? 0;
+}
+
+<h2>Список договоров аренды</h2>
+
+<p>
+    <a href="~/RentalAgreements/Create">Добавить договор аренды</a>
+</p>
+
+@using (Html.BeginForm("Index", "RentalAgreements", FormMethod.Get))
+{
+    <fieldset>
+        Стоимость аренды: @Html.TextBox("TotalAmount", totalAmount)
+        <input type="submit" value="Найти" />
+    </fieldset>
+}
+
+@if (hasFilters)
+{
+    <div class="alert alert-info" style="margin: 10px 0; padding: 15px; border: 1px solid #31708f; background-color: #d9edf7; border-radius: 4px;">
+        <strong>📋 Применены фильтры (восстановлены из куки):</strong><br />
+        • Сумма: <strong>@filterTotalAmount</strong><br />
+        • Сортировка: <strong>@ViewBag.FilterSortOrder</strong><br />
+        • Найдено записей: <strong>@filteredCount</strong> из <strong>@totalAllRecords</strong> (всего)<br />
+        <small>Фильтры автоматически сохраняются в куки на 30 дней и восстанавливаются при повторном посещении страницы.</small><br />
+        <a href="@resetUrl" class="btn btn-sm btn-warning">🔄 Сбросить фильтры</a>
+    </div>
+}
+else
+{
+    <div class="alert alert-secondary" style="margin: 10px 0; padding: 10px;">
+        <strong>👀 Показаны все записи</strong> (@filteredCount из @totalAllRecords).<br />
+        <small>Задайте фильтр по сумме или сортировке — значения сохранятся в куки.</small>
+    </div>
+}
+
+<p></p>
+@if (Model?.RentalAgreements != null && Model.RentalAgreements.Any())
+{
+    <table class="table" border="1">
+        <thead>
+            <tr>
+                <th style="display:none;">Код договора</th>
+                <th>Полное имя</th>
+                <th>Водительское удостоверение</th>
+                <th>Телефон</th>
+                <th>Марка</th>
+                <th>Модель</th>
+                <th>Дата начала аренды</th>
+                <th>Планируемая дата окончания аренды</th>
+                <th>Фактическая дата окончания аренды</th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@Model.SortViewModel.TotalAmountSort" asp-route-TotalAmount="@totalAmount">
+                        Сумма
+                    </a>
+                </th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.RentalAgreements)
+            {
+                <tr>
+                    <td style="display:none;">@item.RentalAgreementId</td>
+                    <td>@item.FullName</td>
+                    <td>@item.LicenseNumber</td>
+                    <td>@item.PhoneNumber</td>
+                    <td>@item.Brand</td>
+                    <td>@item.Model</td>
+                    <td>@item.StartDateTime</td>
+                    <td>@item.PlannedEndDateTime</td>
+                    <td>@item.ActualEndDateTime</td>
+                    <td>@item.TotalAmount</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.RentalAgreementId">Редактировать</a> |
+                        <a asp-action="Delete" asp-route-id="@item.RentalAgreementId">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Нет данных для отображения.</p>
+}
+
+@if (Model?.PageViewModel != null)
+{
+    <div>
+        @if (Model.PageViewModel.HasPreviousPage)
+        {
+            <a href="@Url.Action("Index", "RentalAgreements", new { TotalAmount = totalAmount, sortOrder = Model.SortViewModel.SortOrder, page = Model.PageViewModel.Page - 1 })">Предыдущая</a>
+        }
+
+        @{
+            int currentPage = Model.PageViewModel.Page;
+            int totalPages = Model.PageViewModel.TotalPages;
+            int startPage = Math.Max(1, currentPage - 2);
+            int endPage = Math.Min(totalPages, currentPage + 2);
+        }
+
+        @for (int i = startPage; i <= endPage; i++)
+        {
+            if (i == currentPage)
+            {
+                <span><b>@i</b></span>
+            }
+            else
+            {
+                <a href="@Url.Action("Index", "RentalAgreements", new { TotalAmount = totalAmount, sortOrder = Model.SortViewModel.SortOrder, page = i })">@i</a>
+            }
+        }
+
+        @if (Model.PageViewModel.HasNextPage)
+        {
+            <a href="@Url.Action("Index", "RentalAgreements", new { TotalAmount = totalAmount, sortOrder = Model.SortViewModel.SortOrder, page = Model.PageViewModel.Page + 1 })">Следующая</a>
+        }
+    </div>
+}
+<p></p>
+<p><a href="~/RentalAgreements/Index">Вернуться к списку</a></p>

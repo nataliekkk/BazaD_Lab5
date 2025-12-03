@@ -1,0 +1,63 @@
+﻿@model CarRental_2.ViewModels.RentalAgreementEditCreateViewModel
+
+@{
+    ViewData["Title"] = "Редактировать";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Редактирование данных о договорах аренды</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken() <!-- Токен защиты от подделки -->
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="RentalAgreementId" />
+            <div class="form-group">
+                <label asp-for="ClientId" class="control-label">Код клиента</label>
+                <input asp-for="ClientId" class="form-control" placeholder="Введите код клиента" />
+                <span asp-validation-for="ClientId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CarId" class="control-label">Код автомобиля</label>
+                <input asp-for="CarId" class="form-control" placeholder="Введите код автомобиля" />
+                <span asp-validation-for="CarId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDateTime" class="control-label">Дата начала аренды (dd.MM.yyyy)"</label>
+                <input asp-for="StartDateTime" class="form-control" />
+                <span asp-validation-for="StartDateTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlannedEndDateTime" class="control-label">Планируемая дата окончания аренды (dd.MM.yyyy)"</label>
+                <input asp-for="PlannedEndDateTime" class="form-control" />
+                <span asp-validation-for="PlannedEndDateTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActualEndDateTime" class="control-label">Фактическая дата окончания аренды (dd.MM.yyyy)"</label>
+                <input asp-for="ActualEndDateTime" class="form-control" />
+                <span asp-validation-for="ActualEndDateTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalAmount" class="control-label">Стоимость аренды</label>
+                <input asp-for="TotalAmount" class="form-control" type="number" step="0.01 placeholder=" Введите сумму" />
+                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="~/RentalAgreements/Index">Вернуться к списку</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

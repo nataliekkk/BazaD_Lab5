@@ -1,0 +1,52 @@
+﻿@model CarRental_2.ViewModels.RentalHistoryEditCreateViewModel
+
+@{
+    ViewData["Title"] = "Редактировать";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Редактирование данных об истории аренды</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken() <!-- Токен подделки -->
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="RentalHistoryId" />
+            <div class="form-group">
+                <label asp-for="ClientId" class="control-label">Код клиента</label>
+                    <input asp-for="ClientId" class="form-control" />
+                    <span asp-validation-for="ClientId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDateTime" class="control-label">Дата начала аренды</label>
+                    <input asp-for="StartDateTime" class="form-control" />
+                    <span asp-validation-for="StartDateTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActualEndDateTime" class="control-label">Фактическая дата окончания аренды</label>
+                    <input asp-for="ActualEndDateTime" class="form-control" />
+                    <span asp-validation-for="ActualEndDateTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalAmount" class="control-label">Стоимость аренды</label>
+                <input asp-for="TotalAmount" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="TotalAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+        <a href="~/RentalHistories/Index">Вернуться к списку</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
