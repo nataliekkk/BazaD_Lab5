@@ -1,0 +1,43 @@
+# Название workflow (процесса), которое будет отображаться в интерфейсе GitHub Actions
+name: Build and Publish
+
+# Триггеры, определяющие когда запускается workflow
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Определение jobs (заданий), которые будут выполняться
+jobs:
+  # Job с именем "build" - основная задача сборки
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        
+    steps:
+    # Шаг 1: Получение кода из репозитория
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    # Шаг 2: Установка .NET SDK
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+      
+    # Шаг 3: Восстановление зависимостей проекта
+    - name: Restore dependencies
+      run: dotnet restore ./CarRental_2/CarRental_2.csproj  # Укажите относительный путь
+    
+    # Шаг 4: Сборка проекта
+    - name: Build
+      run: dotnet build ./CarRental_2/CarRental_2.csproj --configuration Release --no-restore
+    
+    # Шаг 5: Публикация (создание готового к распространению пакета)
+    - name: Publish application
+      run: dotnet publish ./CarRental_2/CarRental_2.csproj --configuration Release --output ./publish --no-build
