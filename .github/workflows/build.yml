@@ -3,7 +3,10 @@ name: Build and Publish
 
 # Триггеры, определяющие когда запускается workflow
 on:
-  push:    # запускается при любом push'е в любую ветку
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 # Определение jobs (заданий), которые будут выполняться
 jobs:
